@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.attendance.manager.entities.Attendance;
 import com.attendance.manager.repositories.AttendanceRepo;
-import com.attendance.manager.services.AttService;
 import com.attendance.manager.servicesImpl.AttServiceImpl;
 
 @SpringBootTest
@@ -46,7 +45,6 @@ public class TestAttendenceService {
 	public void testSaveAttendence() {
 		
 		Attendance attendence = new Attendance(101, "10/02/2021", "yes", null);
-		Attendance attendence1 = new Attendance(102, "10/02/2021", "no", null);
 		
 		when(attendenceRepo.save(attendence)).thenReturn(attendence);
 		
