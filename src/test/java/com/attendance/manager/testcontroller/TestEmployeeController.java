@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.ProblemModule;
@@ -31,6 +32,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ActiveProfiles("test")
 @WebMvcTest(controllers = EmployeeController.class)
+//@WithMockUser(username = "employee",password = "123",roles = "NORMAL")
+@WithMockUser(username = "jitendra",password = "123",roles = "ADMIN")
 public class TestEmployeeController {
 
 	@Autowired
@@ -64,7 +67,7 @@ public class TestEmployeeController {
 
 		when(empServiceImpl.getAllEmployee()).thenReturn(empList);
 
-		mockMvc.perform(get("/getAllEmployee")).andExpect(status().isOk());
+		mockMvc.perform(get("/employee/getAllEmployee")).andExpect(status().isOk());
 	}
 
 	@Test
@@ -79,7 +82,7 @@ public class TestEmployeeController {
 
 		when(empServiceImpl.saveEmplyee(emp)).thenReturn(emp);
 
-		mockMvc.perform(post("/saveEmployee").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(post("/employee/saveEmployee").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(emp))).andExpect(status().isOk());
 
 	}
@@ -100,12 +103,13 @@ public class TestEmployeeController {
 
 		when(empServiceImpl.findByEmployeeName("Ashish")).thenReturn(empList);
 
-		mockMvc.perform(get("/getEmployeeByName/{name}", emp.getEmployeeName()))
+		mockMvc.perform(get("/employee/getEmployeeByName/{name}", emp.getEmployeeName()))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.size()", is(empList.size())));
 	}
 
 	@Test
+	
 	public void testGetEmployeeByStartingName() throws Exception {
 
 		Employee emp = new Employee();
@@ -121,7 +125,7 @@ public class TestEmployeeController {
 
 		when(empServiceImpl.findByEmployeeNameStartingWith("p")).thenReturn(empList);
 
-		mockMvc.perform(get("/getEmployeeStartingName/{name}", "p"))
+		mockMvc.perform(get("/employee/getEmployeeStartingName/{name}", "p"))
 				.andExpect(status().isOk());
 	}
 
@@ -137,7 +141,7 @@ public class TestEmployeeController {
 		
 		when(empServiceImpl.updateEmployee(101, emp)).thenReturn(emp);
 
-		mockMvc.perform(put("/updateEmployee/{id}", emp.getId())
+		mockMvc.perform(put("/employee/updateEmployee/{id}", emp.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(emp)))
 				.andExpect(status().isOk());
@@ -157,7 +161,7 @@ public class TestEmployeeController {
 
 		doNothing().when(empServiceImpl).deleteEmployee(emp.getId());
 
-		mockMvc.perform(delete("/deleteEmployee/{id}", emp.getId())).andExpect(status().isOk());
+		mockMvc.perform(delete("/employee/deleteEmployee/{id}", emp.getId())).andExpect(status().isOk());
 	}
 
 }

@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.attendance.manager.entities.Employee;
 import com.attendance.manager.servicesImpl.EmpServiceImpl;
 
 @RestController
+@RequestMapping("/employee")
 public class EmployeeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
@@ -31,7 +33,7 @@ public class EmployeeController {
 		return empServiceImpl.saveEmplyee(employee);
 	}
 	
-	@GetMapping("getAllEmployee")
+	@GetMapping("/getAllEmployee")
 	public List<Employee> getAllEmployee() {
 		logger.info("getAllEmployee EmployeeController method running");
 		return empServiceImpl.getAllEmployee();
@@ -49,13 +51,13 @@ public class EmployeeController {
 		empServiceImpl.deleteEmployee(id);
 	}
 	
-	@GetMapping("getEmployeeByName/{name}")
+	@GetMapping("/getEmployeeByName/{name}")
 	public List<Employee> getEmployeeByName(@PathVariable("name") String name){
 		logger.info("getEmployeeByName EmployeeController method running  ", name);
 		return empServiceImpl.findByEmployeeName(name);
 	}
 	
-	@GetMapping("getEmployeeStartingName/{name}")
+	@GetMapping("/getEmployeeStartingName/{name}")
 	public List<Employee> getEmployeeNameStartingWith(@PathVariable("name") String startingName){
 		logger.info("getEmployeeStartingName EmployeeController method running  ", startingName);
 		return empServiceImpl.findByEmployeeNameStartingWith(startingName);

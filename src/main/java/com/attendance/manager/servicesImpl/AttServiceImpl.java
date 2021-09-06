@@ -34,9 +34,7 @@ public class AttServiceImpl implements AttService{
 
 	@Override
 	public void deleteAttendance(int id) {
-		
-		attendenceRepo.findById(id).get();
-		
+				
 		attendenceRepo.deleteById(id);
 		
 	}

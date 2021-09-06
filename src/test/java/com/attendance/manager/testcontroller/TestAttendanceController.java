@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
@@ -29,6 +30,8 @@ import com.attendance.manager.servicesImpl.AttServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(controllers = AttendanceController.class)
+@WithMockUser(username = "jitendra",password = "123",roles = "ADMIN")
+//@WithMockUser(username = "employee",password = "123",roles = "NORMAL")
 public class TestAttendanceController {
 
 	@Autowired
@@ -60,7 +63,7 @@ public class TestAttendanceController {
 
 		when(attServiceImpl.getAllAttendance()).thenReturn(attList);
 
-		mockMvc.perform(get("/getAttendance")).andExpect(status().isOk())
+		mockMvc.perform(get("/attendance/getAttendance")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.size()", is(attList.size())));
 	}
 
@@ -71,7 +74,7 @@ public class TestAttendanceController {
 
 		when(attServiceImpl.saveAttendance(attendance)).thenReturn(attendance);
 
-		mockMvc.perform(post("/saveAttendance").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(post("/attendance/saveAttendance").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(attendance))).andExpect(status().isOk());
 	}
 
@@ -82,7 +85,7 @@ public class TestAttendanceController {
 
 		when(attServiceImpl.updateAttendance(101, attendance)).thenReturn(attendance);
 
-		mockMvc.perform(put("/updateAttendance/{id}", attendance.getId()).contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(put("/attendance/updateAttendance/{id}", attendance.getId()).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(attendance))).andExpect(status().isOk());
 	}
 	
@@ -93,7 +96,7 @@ public class TestAttendanceController {
 		
 		doNothing().when(attServiceImpl).deleteAttendance(attendance.getId());
 		
-		mockMvc.perform(delete("/deleteAttendance/{id}", attendance.getId())).andExpect(status().isOk());
+		mockMvc.perform(delete("/attendance/deleteAttendance/{id}", attendance.getId())).andExpect(status().isOk());
 	}
 
 }
